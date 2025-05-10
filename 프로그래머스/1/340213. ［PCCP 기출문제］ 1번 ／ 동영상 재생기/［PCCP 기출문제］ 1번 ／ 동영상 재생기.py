@@ -5,9 +5,7 @@ def to_sec(time):
 def to_str(time):
     m = time // 60
     s = time % 60
-    if m < 10: m = '0' + str(m)
-    if s < 10: s = '0' + str(s)
-    return str(m) + ':' + str(s)
+    return f"{m:02d}:{s:02d}"
 
 
 def solution(video_len, pos, op_start, op_end, commands):
@@ -24,13 +22,12 @@ def solution(video_len, pos, op_start, op_end, commands):
             pos -= 10
             if pos < 0:
                 pos = 0
-            elif op_start <= pos <= op_end:
-                pos = op_end
         elif com == "next":
             pos += 10
             if pos > video_len:
                 pos = video_len
-            elif op_start <= pos <= op_end:
+        
+        if op_start <= pos <= op_end:
                 pos = op_end
             
     return to_str(pos)
