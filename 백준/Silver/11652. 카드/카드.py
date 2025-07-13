@@ -1,22 +1,19 @@
-n = int(input()) 
+n = int(input())
 arr = [int(input()) for _ in range(n)]
 arr.sort()
+arr.append(2**62+1)
 
-# max_value = -(2**62 + 1)
-max_cnt = 0
-cnt = 0
-value = -(2**62 + 1)
+cnt = 1
+mxval = arr[0]
+mxcnt = 0
 
-for i in range(n):
-    if arr[i] != value:
-        if cnt > max_cnt:
-            max_cnt = cnt
-            max_value = value
-        value = arr[i]
-        cnt = 1
-    else:
+for i in range(1, n+1):
+    if arr[i-1] == arr[i]:
         cnt += 1
-if cnt > max_cnt:
-    max_value = arr[-1]
+    else:
+        if cnt > mxcnt:
+            mxcnt = cnt
+            mxval = arr[i-1]
+        cnt = 1
 
-print(max_value)
+print(mxval)
