@@ -1,39 +1,38 @@
 from collections import deque
-import sys
-input = lambda: sys.stdin.readline().rstrip()
 
 m, n = map(int, input().split())
-board = [list(map(int, input().split())) for _ in range(n)]
-visited = [[0] * m for _ in range(n)]
 
-dx = [-1, 1, 0, 0]
-dy = [0, 0, -1, 1]
+board = []
+for _ in range(n):
+    board.append(list(map(int, input().split())))
 
-queue = deque()
+que = deque()
+
 for i in range(n):
     for j in range(m):
         if board[i][j] == 1:
-            queue.append((i, j, 1))
+            que.append((i, j))
 
-while queue:
-    x, y, day = queue.popleft()
-    for idx in range(4):
-        nx = x + dx[idx]
-        ny = y + dy[idx]
+dx = [0, 0, -1, 1]
+dy = [-1, 1, 0, 0]
+
+while que:
+    x, y = que.popleft()
+    for d in range(4):
+        nx = x + dx[d]
+        ny = y + dy[d]
         if nx < 0 or nx >= n or ny < 0 or ny >= m: continue
-        if board[nx][ny] == -1: continue
         if board[nx][ny] == 0:
-            board[nx][ny] = day
-            queue.append((nx, ny, day + 1))
+            board[nx][ny] = board[x][y] + 1
+            que.append((nx, ny))
 
-max_val = 0
+result = 0
 for i in range(n):
-    if 0 in board[i]:
-        print(-1)
-        exit()
     for j in range(m):
-        if board[i][j] > max_val:
-            max_val = board[i][j]
-if max_val == 1:
-    print(0)
-else: print(max_val)
+        if board[i][j] == 0:
+            print(-1)
+            exit()
+        if board[i][j] > result:
+            result = board[i][j]
+
+print(result - 1)
