@@ -1,0 +1,30 @@
+n = int(input())
+
+isused1 = [False] * n   # y 축 같은 경우
+isused2 = [False] * ((n - 1) + (n - 1) + 1) # / 대각선
+isused3 = [False] * ((n - 1) + (n - 1) + 1)  # \ 대각선
+
+result = 0
+
+def func(row):
+    global result 
+    if row == n:
+        result += 1
+        return
+    
+    for col in range(n):
+        if isused1[col] or isused2[row + col] or isused3[row - col + n - 1]:
+            continue
+        
+        isused1[col] = True
+        isused2[row + col] = True
+        isused3[row - col + n - 1] = True
+            
+        func(row + 1)
+        
+        isused1[col] = False
+        isused2[row + col] = False
+        isused3[row - col + n - 1] = False
+    
+func(0)
+print(result)
