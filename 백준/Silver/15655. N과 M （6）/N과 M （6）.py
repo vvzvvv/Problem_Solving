@@ -1,15 +1,14 @@
 n, m = map(int, input().split())
-arr = list(map(int, input().split()))
-arr.sort()
-result = []
+arr = sorted(list(map(int, input().split())))
+path = [0] * m
 
-
-def func(depth, start_idx):
+def func(start, depth):
     if depth == m:
-        print(*result)
+        print(*path)
         return
-    for i in range(start_idx, n):
-        result.append(arr[i])
-        func(depth + 1, i + 1)
-        result.pop()
+    
+    for i in range(start, n):
+        path[depth] = arr[i]
+        func(i + 1, depth + 1)
+        
 func(0, 0)
