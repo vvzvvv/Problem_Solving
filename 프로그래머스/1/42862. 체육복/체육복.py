@@ -1,17 +1,10 @@
 def solution(n, lost, reserve):
-    for r in reserve[:]:
-        if r in lost:
-            lost.remove(r)
-            reserve.remove(r)
-    reserve.sort()
-    arr = [-1, 1]
-    for i in reserve[:]:
-        for num in arr:
-            if i + num in lost:
-                lost.remove(i+num)
+    lost, reserve = list(set(lost) - set(reserve)), list(set(reserve) - set(lost))
+    
+    for re in reserve:
+        for r in re - 1, re + 1: 
+            if r in lost:
+                lost.remove(r)
                 break
-    
-    answer = n - len(lost)
-    return answer
-    
-    
+                
+    return n - len(lost)
