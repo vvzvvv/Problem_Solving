@@ -1,40 +1,22 @@
 def solution(n):
-    answer = [[0] * n for _ in range(n)]
-    num = 1
-    x, y = 0, 0
+    answer = [[-1 for _ in range(n)] for _ in range(n)]
     
-    while num <= n*n:
+    # 우, 하, 좌, 상
+    dx = [0, 1, 0, -1]
+    dy = [1, 0, -1, 0]
+    
+    x, y, d = 0, -1, 0
+    num = 1
+    while num <= n * n:
+        nx = x + dx[d]
+        ny = y + dy[d]
         
-        while (y != n) and answer[x][y] == 0:
-            answer[x][y] = num
-            y += 1
-            num += 1
-            
-        y -= 1
-        x += 1
+        if nx < 0 or nx >= n or ny < 0 or ny >= n or answer[nx][ny] != -1:
+            d = (d + 1) % 4
         
-        while (x != n) and answer[x][y] == 0:
+        else:
+            x, y = nx, ny
             answer[x][y] = num
-            x += 1
             num += 1
-            
-        x -= 1
-        y -= 1
-        
-        while (y >= 0) and answer[x][y] == 0:
-            answer[x][y] = num
-            y -= 1
-            num += 1
-            
-        y += 1
-        x -= 1
-        
-        while (x >= 0) and answer[x][y] == 0:
-            answer[x][y] = num
-            x -= 1
-            num += 1
-            
-        y += 1
-        x += 1
         
     return answer
