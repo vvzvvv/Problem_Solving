@@ -1,19 +1,16 @@
 def solution(players, callings):
-    d = {}
-    di = {}
-    for i, player in enumerate(players):
-        d[player] = i
-        di[i] = player
-        
-    for call in callings: 
-        call_num = d[call]
-        prev_num = call_num - 1
-        prev_name = di[prev_num]
-        
-        d[call], d[prev_name] = prev_num, call_num
-        di[prev_num], di[call_num] = call, prev_name
-        
-    result = [0] * len(players)
-    for k, v in d.items():
-        result[v] = k
-    return result
+    d1, d2 = {}, {}
+    
+    for rank, player in enumerate(players):
+        d1[rank] = player
+        d2[player] = rank
+    for now in callings:
+        now_rank = d2[now]
+        prev = d1[now_rank - 1]
+        prev_rank = d2[prev]
+        d1[prev_rank], d1[now_rank] = now, prev
+        d2[now] -= 1
+        d2[prev] += 1
+
+    sorted(d1)
+    return list(d1.values())
