@@ -1,29 +1,20 @@
 def solution(X, Y):
+    x_arr = [0 for _ in range(10)]
+    y_arr = [0 for _ in range(10)]
+    
+    for num in X:
+        x_arr[int(num)] += 1
+    for num in Y:
+        y_arr[int(num)] += 1
+
     answer = ''
-    xi = {}
-    yi = {}
-    for ch in X:
-        if ch not in xi:
-            xi[ch] = 1
-        else: xi[ch] += 1
-    for ch in Y:
-        if ch not in yi:
-            yi[ch] = 1
-        else: yi[ch] += 1
-    
-    d = {}
-    for num, cnt in xi.items():
-        if num in yi: 
-            d[num] = min(xi[num], yi[num])
-
-    if not d: return "-1"
-    elif len(d) == 1 and '0' in d: return "0"
-
     for i in range(9, -1, -1):
-        if str(i) in d:
-            print(i)
-            for _ in range(d[str(i)]):
-                answer += str(i)
+        if x_arr[i] == 0 or y_arr[i] == 0: continue
+        if x_arr[i] >= y_arr[i]:
+            answer += str(i) * y_arr[i]
+        else:
+            answer += str(i) * x_arr[i]
     
+    if answer == "": return "-1"
+    if answer[0] == "0": return "0"
     return answer
-    
