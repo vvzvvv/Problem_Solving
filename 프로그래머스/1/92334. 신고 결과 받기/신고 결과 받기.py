@@ -1,26 +1,17 @@
 def solution(id_list, report, k):
-    record = {}    
-    for r in report:
-        reporter, reported = r.split()
-        if reporter not in record:
-            record[reporter] = {reported}
-        else:
-            record[reporter].add(reported)
+    answer = {id: 0 for id in id_list }
+    report_dict = { id: [] for id in id_list }
+    report_cnt = { id: 0 for id in id_list }
     
-    count = {}
-    for reporteds in record.values():
-        if reporteds != 0: 
-            for r in reporteds:
-                if r not in count:
-                    count[r] = 1
-                else:
-                    count[r] += 1
+    for re in report:
+        reporter, reportee = re.split()
+        if reportee not in report_dict[reporter]:
+            report_dict[reporter].append(reportee)
+            report_cnt[reportee] += 1
     
-    l = [0] * len(id_list)
-    for reported, count in count.items():
-        if count >= k:
-            for reporter, value in record.items():
-                if reported in value:
-                    l[id_list.index(reporter)] += 1
-
-    return l
+    for id, cnt in report_cnt.items():
+        if cnt >= k:
+            for er, ee in report_dict.items():
+                if id in ee: answer[er] += 1
+    
+    return list(answer.values())
