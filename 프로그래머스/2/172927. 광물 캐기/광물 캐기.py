@@ -1,31 +1,41 @@
 def solution(picks, minerals):
-    answer = 0
-    if len(minerals) > sum(picks) * 5:
-        minerals = minerals[:sum(picks) * 5]
-        
-    minerals = [minerals[i:i+5] for i in range(0, len(minerals), 5)]
-    d = {"diamond": 25, "iron": 5, "stone": 1}
+    n = sum(picks)
+    if len(minerals) > n * 5: minerals = minerals[:n*5]
     
-    for i in range(len(minerals)):
-        fatigue = 0
-        for j in range(len(minerals[i])):
-            fatigue += d[minerals[i][j]]
-        minerals[i].append(fatigue)
-    minerals.sort(key=lambda x: -x[-1])
-    for i in minerals:
-        i.remove(i[-1])
-    #print(minerals)
-    for mineral in minerals:
-        if picks[0]: # 다이아곡괭 있다면
-            answer += len(mineral)
-            picks[0] -= 1 # 5개 캐고 곡괭이 소진
-        elif picks[1]: # 철곡괭
-            for m in mineral:
-                if m == "diamond": answer += 5
-                else: answer += 1
+    fatigue = [
+        [1, 1, 1],
+        [5, 1, 1],
+        [25, 5, 1]
+    ]
+    
+    wei_mines = []
+    for i in range(0, len(minerals), 5):
+        mines = minerals[i:i+5]
+        weight = 0
+        for m in mines:
+            if m == "diamond": weight += 25
+            elif m == "iron": weight += 5
+            else: weight += 1
+        wei_mines.append([weight, mines])
+    wei_mines.sort(key=lambda x: x[0], reverse=True)
+    
+    result = 0
+    for wei, mines in wei_mines:
+        if picks[0]:
+            picks[0] -= 1
+            pick = 0
+        elif picks[1]:
             picks[1] -= 1
-        elif picks[2]: # 돌곡괭
-            for m in mineral:
-                answer += d[m]
+            pick = 1
+        elif picks[2]:
             picks[2] -= 1
-    return answer
+            pick = 2
+        
+        for m in mines:
+            if m == "diamond":
+                result += fatigue[pick][0]
+            elif m == "iron":
+                result += fatigue[pick][1]
+            else:
+                result += 1
+    return result
