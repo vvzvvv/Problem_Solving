@@ -1,40 +1,31 @@
 from collections import deque
 
 def solution(board):
-    answer = 0
-    row = len(board)
-    col = len(board[0])
-    for x in range(row):
-        for y in range(col):
-            if board[x][y] == "R":
-                start = (x, y)
-            elif board[x][y] == "G":
-                goal = (x, y)
+    n, m = len(board), len(board[0])
+    visited = [[float('inf')] * m for _ in range(n)]
+    que = deque()
+    cnt = 0
+    dx, dy = [-1, 1, 0, 0], [0, 0, -1, 1]
     
-    dist = [[float('inf')] * col for _ in range(row)]
-    dist[start[0]][start[1]] = 0
-    dx = [-1, 1, 0, 0]
-    dy = [0, 0, -1, 1]
+    for i in range(n):
+        for j in range(m):
+            if board[i][j] == 'R': # 시작 위치
+                for d in range(4):
+                    que.append((i, j, d, cnt))
+            elif board[i][j] == 'G': # 종료 위치
+                ex, ey = i, j
+    
+    while que:
+        x, y, d, cnt = que.popleft()
+        while 1:
+            nx, ny = x + dx[d], y + dy[d]
+            if not(0 <= nx < n and 0 <= ny < m) or board[nx][ny] == 'D':
+                if visited[x][y] > cnt + 1:
+                    visited[x][y] = cnt + 1
+                    for di in range(4):
+                        que.append((x, y, di, cnt + 1))
+                break
+            x, y = nx, ny
 
-    #def bfs(start, goal):
-    queue = deque()
-    queue.append(start)
-    while queue:
-        x, y = queue.popleft()
-        if (x, y) == goal:
-            return dist[x][y]
-
-        for i in range(4):
-            nx, ny = x, y
-            while True:
-                nx += dx[i]
-                ny += dy[i]
-                if nx < 0 or nx >= row or ny < 0 or ny >= col or board[nx][ny] == "D":
-                    nx -= dx[i]
-                    ny -= dy[i]
-                    break
-                    
-            if dist[nx][ny] > dist[x][y] + 1:
-                dist[nx][ny] = dist[x][y] + 1
-                queue.append((nx, ny))
-    return -1
+    if visited[ex][ey] == float('inf'): return -1
+    else: return visited[ex][ey]
